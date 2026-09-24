@@ -1,0 +1,35 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a crew-scheduling and equipment-logistics robot
+;; performs watch/duty scheduling, service-record logging and supply-order
+;; coordination for a ship's deck crew (ISCO 8350). It never performs a deck
+;; operation (mooring, cargo securing). Its physical work is the logistics:
+;; carrying a crate of ship's stores along the main deck when the vessel is
+;; heeled, and supplying deck wash-down water through the fire/wash hose.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-8350"
+ :cases
+ [{:id :stores-crate-along-heeled-deck
+   :kind :transport
+   :procedure "deck logistics robot carries a 60 kg crate of ship's stores 40 m along the main deck from the provision crane to the stores hatch, with the deck inclined by trim/heel"
+   :params {:mass-kg 70.0 :payload-kg 60.0 :distance-m 40.0 :v-max-mps 0.8 :a-max-mps2 0.4
+            :brake-decel-mps2 0.6 :drive-force-n 220.0 :crr 0.02
+            :cog-height-m 0.35 :support-half-length-m 0.30 :payload-cog-height-m 0.60
+            :max-time-s 1200.0}
+   :sweep {:param :slope-deg :values [0.0 3.0 6.0 9.0 12.0]}
+   :quantity :cycle-time-s
+   :limit {:max 90.0 :basis "estimate: one deck leg within the 15-minute stores-loading window of a port call, shared between several crates"}
+   :boundary {:lo 0.0 :hi 20.0}}
+  {:id :deck-washdown-hose
+   :kind :pipe-flow
+   :procedure "supply deck wash-down sea water (120 to 600 L/min) through a 30 m, 38 mm hose from the deck hydrant"
+   :params {:diameter-m 0.038 :length-m 30.0 :roughness-m 1.5e-5 :density-kg-m3 1025.0
+            :viscosity-pa-s 1.08e-3 :pump-efficiency 0.60 :elevation-m 2.0}
+   :sweep {:param :q-m3s :values [0.002 0.004 0.006 0.008 0.010]}
+   :quantity :head-m
+   :limit {:max 40.0 :basis "estimate: head available at a deck hydrant from a general-service pump rated about 4 bar"}
+   :boundary {:lo 0.001 :hi 0.014}}]}
