@@ -1,5 +1,5 @@
 (ns deckcrew.actor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [deckcrew.actor :as actor]
             [deckcrew.store :as store]))
 
