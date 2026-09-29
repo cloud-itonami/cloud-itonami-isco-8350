@@ -1,7 +1,7 @@
 (ns deckcrew.store
   "SSoT for the ISCO-08 8350 Ships' Deck Crews and Related Workers
   scheduling/logistics actor (itonami actor pattern, ADR-2607121000 /
-  CLAUDE.md Actors section; README's 'Robotics premise' — this actor
+  AGENTS.md Actors section; README's 'Robotics premise' — this actor
   coordinates crew scheduling and logistics ONLY. It never performs a
   deck operation itself: mooring, cargo securing and general
   seamanship stay with the human deck crew and the deck officer's own
